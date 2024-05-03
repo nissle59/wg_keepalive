@@ -1,9 +1,9 @@
 import configparser
-import subprocess
-import pathlib
-import sys
-import time
 import logging
+import pathlib
+import subprocess
+import sys
+from ping_pong import *
 
 handler = logging.FileHandler('app.log')
 formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
@@ -14,8 +14,6 @@ logger.addHandler(handler)
 logger.addHandler(s_handler)
 logger.setLevel(logging.INFO)
 logger.propagate = False
-
-from ping_pong import *
 
 cnf_file = pathlib.Path('client.conf')
 srv_cnf_file = pathlib.Path('server.conf')
@@ -39,14 +37,12 @@ def up():
         config_data = fd.read()
     config_path = f'/etc/wireguard/{wg_interface}.conf'
 
-    # Пишем данные в конфигурационный файл
     if not pathlib.Path('/etc/wireguard').exists():
         pathlib.Path('/etc/wireguard').mkdir(parents=True, exist_ok=True)
 
     with open(config_path, 'w') as fd:
         fd.write(config_data)
 
-    # Поднимаем WireGuard интерфейс с помощью wg-quick
     try:
         subprocess.run(['wg-quick', 'up', wg_interface], check=True)
         logger.info(f"Туннель {wg_interface} успешно поднят.")

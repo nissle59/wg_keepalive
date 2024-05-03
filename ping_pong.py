@@ -1,6 +1,5 @@
 import random
 import socket
-import os
 import struct
 import select
 import time
@@ -76,18 +75,3 @@ def receive_ping(sock, packet_id, time_sent, timeout):
 
         if p_id == packet_id:  # Проверка идентификатора пакета
             return time_received - time_sent
-
-    return None
-
-
-# Пример использования
-if __name__ == "__main__":
-    dest_ip = '10.8.0.1'  # Примерный IP адрес для теста PING
-    iface = 'Nick-Laptop'  # Имя интерфейса WireGuard
-
-    print(f"Pinging {dest_ip} on interface {iface}:")
-    delay = ping(dest_ip)#, iface=iface)
-    if delay:
-        print(f"Ответ от {dest_ip} за {delay * 1000:.2f}ms")
-    else:
-        print("Таймаут ожидания ответа от хоста.")
